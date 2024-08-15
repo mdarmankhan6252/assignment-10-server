@@ -1,19 +1,15 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 5000;
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-require('dotenv').config();
+
 
 //middle ware
 app.use(cors())
 app.use(express.json())
 
-
-
-app.get('/', (req, res) =>{
-   res.send('My server is running')
-})
 
 
 
@@ -32,7 +28,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
 
-    await client.connect();
+    // await client.connect();
 
 
     const craftCollection = client.db("craftDB").collection('craft')
@@ -47,7 +43,7 @@ async function run() {
 
     app.post('/craft', async(req, res) =>{
       const newCraft = req.body;
-      console.log(newCraft);
+      // console.log(newCraft);
       const result = await craftCollection.insertOne(newCraft)
       res.send(result)
     })
@@ -63,7 +59,7 @@ async function run() {
 
     app.post('/user', async(req,res) =>{
       const user = req.body;
-      console.log(user);
+      // console.log(user);
       const result = await userCollection.insertOne(user)
       res.send(result)
     })
@@ -80,8 +76,8 @@ async function run() {
       res.send(result)
     })
 
-    await client.db("admin").command({ ping: 1 });
-    console.log("You successfully connected to MongoDB!");
+    // await client.db("admin").command({ ping: 1 });
+    // console.log("You successfully connected to MongoDB!");
   } finally {
     
    //  await client.close();
@@ -89,7 +85,9 @@ async function run() {
 }
 run().catch(console.dir);
 
-
+app.get('/', (req, res) =>{
+  res.send('My server is running')
+})
 
 
 app.listen(port, () =>{
